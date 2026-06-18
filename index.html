@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuro | Minimal Sushi Experience</title>
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Stile Dedicato (Custom CSS per UI/UX, colori e animazioni) -->
+    <style>
+        /* Definizione delle variabili colore del brand basate sull'immagine fornita */
+        :root {
+            --brand-black: #060606;      /* Nero profondo di sfondo */
+            --brand-dark: #121212;       /* Grigio scuro/antracite per elementi secondari */
+            --brand-light: #f5f5f7;      /* Bianco ghiaccio per testi ad alta leggibilità */
+            --brand-accent: #BE8414;     /* Oro/Bronzo delicato per i dettagli e i bottoni */
+            --brand-accent-rgb: 197, 168, 128;
+        }
+
+        /* Reset e Impostazioni Base */
+        body {
+            background-color: var(--brand-black);
+            color: var(--brand-light);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        ::selection {
+            background-color: var(--brand-accent);
+            color: var(--brand-black);
+        }
+
+        /* Contenitore Principale Hero */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Sfondo e Overlay identico al mockup caricato */
+        .hero-bg-container {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: right center; /* Allinea l'immagine a destra per mostrare il sushi */
+            transform: scale(1.05);
+            opacity: 0;
+            animation: scaleIn 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Forte sfumatura da sinistra (nero) a destra (trasparente) per rivelare il cibo */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, 
+                var(--brand-black) 0%, 
+                rgba(6, 6, 6, 0.98) 35%, 
+                rgba(6, 6, 6, 0.75) 55%, 
+                rgba(6, 6, 6, 0.2) 100%
+            );
+            opacity: 0;
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 300ms forwards;
+        }
+
+        /* Elementi Custom di Navigazione */
+        .brand-logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1.6rem;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            color: #ffffff;
+            transition: opacity 0.3s;
+        }
+        .brand-logo:hover {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .nav-link-custom {
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: #e5e7eb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-link-custom:hover {
+            color: var(--brand-accent);
+        }
+
+        /* Bottoni Personalizzati */
+        .btn-brand-outline {
+            border: 1px solid var(--brand-accent);
+            color: #ffffff;
+            padding: 0.65rem 1.75rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            background: transparent;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-brand-outline:hover {
+            background-color: var(--brand-accent);
+            color: var(--brand-black);
+            border-color: var(--brand-accent);
+        }
+
+        .btn-brand-solid {
+            background-color: var(--brand-accent);
+            color: var(--brand-black);
+            padding: 1rem 2.25rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-brand-solid:hover {
+            background-color: var(--brand-light);
+            color: var(--brand-black);
+        }
+
+        .btn-brand-ghost {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 1rem 2.25rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            background: transparent;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-brand-ghost:hover {
+            border-color: var(--brand-accent);
+            color: var(--brand-accent);
+        }
+
+        /* Elementi Testuali della Hero */
+        .tagline-line {
+            height: 1px;
+            width: 3.5rem;
+            background-color: var(--brand-accent);
+            display: inline-block;
+        }
+
+        .tagline-text {
+            color: var(--brand-accent);
+            letter-spacing: 0.25em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            color: #ffffff;
+            font-size: calc(2.2rem + 3vw);
+            line-height: 1.15;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title span {
+            color: var(--brand-accent);
+        }
+
+        .hero-desc {
+            color: #a3a3a3;
+            font-size: 1.05rem;
+            font-weight: 300;
+            line-height: 1.8;
+            max-width: 400px; /* Layout compatto e minimale */
+        }
+
+        /* Menu Mobile a Schermo Intero (Overlay) */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--brand-black);
+            z-index: 1050;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(-100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-menu-overlay.active {
+            transform: translateY(0);
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: var(--brand-light);
+            padding: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .mobile-menu-close:hover {
+            transform: rotate(90deg);
+            color: var(--brand-accent);
+        }
+
+        .mobile-menu-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        .mobile-menu-links li {
+            margin: 2rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .mobile-menu-overlay.active .mobile-menu-links li {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Ritardi per i link del menu mobile */
+        .mobile-menu-overlay.active .mobile-menu-links li:nth-child(1) { transition-delay: 0.2s; }
+        .mobile-menu-overlay.active .mobile-menu-links li:nth-child(2) { transition-delay: 0.3s; }
+        .mobile-menu-overlay.active .mobile-menu-links li:nth-child(3) { transition-delay: 0.4s; }
+        .mobile-menu-overlay.active .mobile-menu-links li:nth-child(4) { transition-delay: 0.5s; }
+        .mobile-menu-overlay.active .mobile-menu-links li:nth-child(5) { transition-delay: 0.6s; }
+
+        .mobile-nav-link {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--brand-light);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: color 0.3s;
+        }
+
+        .mobile-nav-link:hover {
+            color: var(--brand-accent);
+        }
+
+        /* Scroll Down Indicator */
+        .scroll-down-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        /* Stili della Sezione Selezioni / Categorie Menù */
+        .section-selections {
+            background-color: var(--brand-black);
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+            position: relative;
+        }
+
+        /* Card Minimali Categoria */
+        .category-card {
+            background-color: var(--brand-dark);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 2px;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--brand-accent);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .category-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+        }
+
+        .category-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .category-card:hover .category-img {
+            transform: scale(1.08);
+        }
+
+        .category-content {
+            padding: 2rem 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .category-card:hover .category-title {
+            color: var(--brand-accent);
+        }
+
+        .category-desc {
+            color: #8c8c8c;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-link {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--brand-accent);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
+
+        .category-card:hover .category-link {
+            gap: 0.8rem;
+        }
+
+        /* Stili della Sezione Chi Siamo */
+        .section-about {
+            background-color: var(--brand-dark);
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .about-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .about-img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            aspect-ratio: 16 / 10;
+            filter: grayscale(15%) contrast(102%);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .about-img-wrapper:hover .about-img {
+            transform: scale(1.03);
+        }
+
+        .about-feature-box {
+            border-left: 2px solid var(--brand-accent);
+            padding-left: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .about-feature-text {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* Stili della Sezione Contatti */
+        .section-contacts {
+            background-color: var(--brand-black);
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .contact-info-block {
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-info-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--brand-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info-value {
+            font-size: 1rem;
+            font-weight: 300;
+            color: #d1d5db;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .contact-info-value a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-info-value a:hover {
+            color: var(--brand-accent);
+        }
+
+        /* Wrapper della Mappa */
+        .map-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            height: 450px;
+            width: 100%;
+        }
+
+        /* Stile scuro applicato tramite filtro CSS alla mappa nativa */
+        .map-iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: grayscale(100%) invert(92%) contrast(140%);
+            opacity: 0.85;
+        }
+
+        /* Stili del Footer */
+        .footer-custom {
+            background-color: #030303;
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .footer-logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            color: #ffffff;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-logo:hover {
+            color: #ffffff;
+            opacity: 0.8;
+        }
+
+        .footer-link {
+            color: #8c8c8c;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--brand-accent);
+        }
+
+        .footer-social-icon {
+            color: #8c8c8c;
+            transition: color 0.3s, transform 0.3s;
+            display: inline-block;
+        }
+
+        .footer-social-icon:hover {
+            color: var(--brand-accent);
+            transform: translateY(-2px);
+        }
+
+        .footer-copyright {
+            color: #555555;
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        /* Keyframes delle Animazioni del Caricamento Iniziale (Hero) */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            0% { opacity: 0; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* Classi di Animazione con Delay scaglionati */
+        .anim-fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .anim-fade-in {
+            opacity: 0;
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-nav { animation-delay: 500ms; }
+        .delay-tagline { animation-delay: 700ms; }
+        .delay-title { animation-delay: 900ms; }
+        .delay-desc { animation-delay: 1100ms; }
+        .delay-buttons { animation-delay: 1300ms; }
+        .delay-scroll { animation-delay: 1600ms; }
+
+        /* --- NUOVO SISTEMA DI ANIMAZIONI IN ENTRATA AL GESTO DI SCORRIMENTO (Scroll-Reveal) --- */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* Quando l'elemento entra nella viewport, attiviamo questa classe */
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delay scaglionati per griglie ed elementi consecutivi */
+        .reveal-delay-1 { transition-delay: 150ms; }
+        .reveal-delay-2 { transition-delay: 300ms; }
+        .reveal-delay-3 { transition-delay: 450ms; }
+        .reveal-delay-4 { transition-delay: 600ms; }
+
+        /* Icona Menu Mobile minimale con reset per gli stati active/focus/touch */
+        .mobile-toggle {
+            background: transparent !important;
+            border: none;
+            color: var(--brand-light);
+            padding: 0.5rem;
+            transition: color 0.3s;
+            -webkit-tap-highlight-color: transparent; /* Elimina il riquadro di tap grigio/nero su iOS/Android */
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        
+        .mobile-toggle:hover,
+        .mobile-toggle:focus,
+        .mobile-toggle:active {
+            background: transparent !important;
+            color: var(--brand-accent) !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Stile SVG generico per renderle fluide */
+        svg.icon {
+            display: inline-block;
+            vertical-align: middle;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section Container -->
+    <header class="hero-container">
+        
+        <!-- Sfondo con Immagine e Sfumatura Dedicata -->
+        <div class="hero-bg-container">
+            <img 
+                src="background.jpg" 
+                alt="[Immagine di Sushi elegante su sfondo scuro]" 
+                class="hero-bg-image"
+            >
+            <div class="hero-overlay"></div>
+        </div>
+
+        <!-- Barra di Navigazione (Esattamente come da Mockup) -->
+        <nav class="navbar relative-top z-3 px-3 px-md-5 py-4 anim-fade-in delay-nav">
+            <div class="container-fluid d-flex justify-content-between align-items-center p-0">
+                <!-- Logo sulla sinistra -->
+                <a href="#" class="brand-logo">
+                    LOGO
+                </a>
+
+                <!-- Link Desktop centrali -->
+                <ul class="d-none d-md-flex list-unstyled gap-5 m-0 p-0">
+                    <li><a href="#" class="nav-link-custom">Home</a></li>
+                    <li><a href="#selections" class="nav-link-custom">Menu</a></li>
+                    <li><a href="#about" class="nav-link-custom">Chi siamo</a></li>
+                    <li><a href="#contacts" class="nav-link-custom">Contatti</a></li>
+                </ul>
+
+                <!-- Bottone Prenota Desktop sulla destra con bordo dorato -->
+                <div class="d-none d-md-block">
+                    <a href="#" class="btn-brand-outline">
+                        Prenota
+                    </a>
+                </div>
+
+                <!-- Menu Hamburger Mobile (Icona SVG Incorporata) -->
+                <button class="d-md-none mobile-toggle" type="button" id="mobileToggle" aria-label="Apri Menu">
+                    <svg class="icon" width="28" height="28" viewBox="0 0 24 24"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Menu Mobile Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenu">
+            <button class="mobile-menu-close" id="mobileClose" aria-label="Chiudi Menu">
+                <svg class="icon" width="32" height="32" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+            </button>
+            <ul class="mobile-menu-links">
+                <li><a href="#" class="mobile-nav-link">Home</a></li>
+                <li><a href="#selections" class="mobile-nav-link">Menu</a></li>
+                <li><a href="#about" class="mobile-nav-link">Chi siamo</a></li>
+                <li><a href="#contacts" class="mobile-nav-link">Contatti</a></li>
+                <li>
+                    <a href="#" class="btn-brand-solid d-inline-block mt-3">
+                        Prenota
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Contenuto Principale Hero -->
+        <main class="container-fluid flex-grow-1 d-flex align-items-center z-3 px-3 px-md-5">
+            <div class="row w-100 m-0">
+                <div class="col-12 col-md-8 col-lg-5 col-xl-4 p-0">
+                    
+                    <!-- Sottotitolo / Tagline del Mockup -->
+                    <div class="d-flex align-items-center gap-3 mb-4 anim-fade-in-up delay-tagline">
+                        <span class="tagline-line"></span>
+                        <span class="tagline-text">ESSENZA DI SAPORI</span>
+                    </div>
+
+                    <!-- Titolo Richiesto -->
+                    <h1 class="font-serif hero-title mb-4 anim-fade-in-up delay-title">
+                        L'Armonia del <br>
+                        <span>Vero Sushi.</span>
+                    </h1>
+
+                    <!-- Sottotitolo Richiesto -->
+                    <p class="hero-desc mb-5 anim-fade-in-up delay-desc">
+                        Un viaggio sensoriale unico che fonde il rigore e la purezza della tradizione culinaria giapponese con l'eleganza contemporanea dei sapori d'eccellenza.
+                    </p>
+
+                    <!-- Due Pulsanti Richiesti -->
+                    <div class="d-flex flex-column flex-sm-row gap-3 anim-fade-in-up delay-buttons">
+                        <a href="#" class="btn-brand-solid text-center">
+                            Riserva un Tavolo
+                        </a>
+                        <a href="#" class="btn-brand-ghost text-center">
+                            Esplora il Menu
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <!-- Indicatore di scorrimento verso il basso (Icona SVG Incorporata) -->
+        <div class="scroll-down-indicator anim-fade-in delay-scroll" onclick="scrollToSelections()">
+            <div class="animate-bounce" style="animation: bounce 2s infinite;">
+                <svg class="icon" width="24" height="24" viewBox="0 0 24 24" style="color: var(--brand-accent);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- Sezione Selezioni (4 Card Categoria + Bottone) -->
+    <section class="section-selections" id="selections">
+        <div class="container px-4 px-md-5">
+            
+            <!-- Intestazione della Sezione -->
+            <div class="row mb-5 justify-content-center text-center scroll-reveal">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="d-inline-flex align-items-center gap-3 mb-3">
+                        <span class="tagline-line" style="width: 2rem;"></span>
+                        <span class="tagline-text" style="font-size: 0.7rem;">Il Nostro Menù</span>
+                        <span class="tagline-line" style="width: 2rem;"></span>
+                    </div>
+                    <h2 class="font-serif text-white" style="font-size: calc(1.8rem + 1vw); font-weight: 400;">
+                        Le Nostre Selezioni
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Griglia delle 4 Card Categoria -->
+            <div class="row g-4 mb-5 justify-content-center">
+                
+                <!-- Card 1: Nigiri -->
+                <div class="col-12 col-sm-6 col-lg-3 scroll-reveal reveal-delay-1">
+                    <article class="category-card">
+                        <div class="category-img-wrapper">
+                            <img 
+                                src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?q=80&w=600&auto=format&fit=crop" 
+                                alt="[Immagine di Nigiri Sushi su vassoio di ardesia]" 
+                                class="category-img"
+                            >
+                        </div>
+                        <div class="category-content">
+                            <div>
+                                <h3 class="category-title">Nigiri</h3>
+                                <p class="category-desc">Eleganti e puri. Una morbida fetta di pesce freschissimo adagiata su riso cotto a regola d'arte.</p>
+                            </div>
+                            <a href="#" class="category-link">
+                                Vedi Nigiri <svg class="icon" width="14" height="14" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Card 2: Uramaki -->
+                <div class="col-12 col-sm-6 col-lg-3 scroll-reveal reveal-delay-2">
+                    <article class="category-card">
+                        <div class="category-img-wrapper">
+                            <img 
+                                src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=600&auto=format&fit=crop" 
+                                alt="[Immagine di Uramaki Sushi dorati e sfumati]" 
+                                class="category-img"
+                            >
+                        </div>
+                        <div class="category-content">
+                            <div>
+                                <h3 class="category-title">Uramaki</h3>
+                                <p class="category-desc">Armonia di consistenze. Roll invertiti con ingredienti ricercati ed accostamenti di sapore sofisticati.</p>
+                            </div>
+                            <a href="#" class="category-link">
+                                Vedi Uramaki <svg class="icon" width="14" height="14" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Card 3: Sashimi -->
+                <div class="col-12 col-sm-6 col-lg-3 scroll-reveal reveal-delay-3">
+                    <article class="category-card">
+                        <div class="category-img-wrapper">
+                            <img 
+                                src="https://images.unsplash.com/photo-1534482421-64566f976cfa?q=80&w=600&auto=format&fit=crop" 
+                                alt="[Immagine di fette pregiate di Sashimi fresco]" 
+                                class="category-img"
+                            >
+                        </div>
+                        <div class="category-content">
+                            <div>
+                                <h3 class="category-title">Sashimi</h3>
+                                <p class="category-desc">La purezza assoluta. Tagli magistrali del miglior pescato, serviti crudi per esaltarne la vera essenza.</p>
+                            </div>
+                            <a href="#" class="category-link">
+                                Vedi Sashimi <svg class="icon" width="14" height="14" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Card 4: Temaki -->
+                <div class="col-12 col-sm-6 col-lg-3 scroll-reveal reveal-delay-4">
+                    <article class="category-card">
+                        <div class="category-img-wrapper">
+                            <img 
+                                src="https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?q=80&w=600&auto=format&fit=crop" 
+                                alt="[Immagine di cono Temaki Sushi avvolto nell'alga Nori]" 
+                                class="category-img"
+                            >
+                        </div>
+                        <div class="category-content">
+                            <div>
+                                <h3 class="category-title">Temaki</h3>
+                                <p class="category-desc">Fatto a mano. Squisiti coni d'alga Nori croccante riempiti al momento con pesce, riso e verdure fresche.</p>
+                            </div>
+                            <a href="#" class="category-link">
+                                Vedi Temaki <svg class="icon" width="14" height="14" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+
+            <!-- Bottone Sotto le Card -->
+            <div class="row pt-4 justify-content-center text-center scroll-reveal">
+                <div class="col-12">
+                    <a href="#" class="btn-brand-outline px-5 py-3">
+                        Scopri il Menù Completo
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sezione Chi Siamo (Napoli Fuorigrotta) -->
+    <section class="section-about" id="about">
+        <div class="container px-4 px-md-5">
+            <div class="row align-items-center justify-content-between g-5">
+                
+                <!-- Colonna Testo Narrativo (Sinistra) -->
+                <div class="col-12 col-lg-6 col-xl-5 scroll-reveal">
+                    <div class="d-inline-flex align-items-center gap-3 mb-4">
+                        <span class="tagline-line" style="width: 2.5rem;"></span>
+                        <span class="tagline-text" style="font-size: 0.7rem;">La Nostra Origine</span>
+                    </div>
+
+                    <h2 class="font-serif text-white mb-4" style="font-size: calc(1.8rem + 1vw); font-weight: 400; line-height: 1.25;">
+                        L'essenza del Sol Levante <br>
+                        <span style="color: var(--brand-accent);">nel cuore di Fuorigrotta.</span>
+                    </h2>
+
+                    <p class="mb-4" style="color: #a3a3a3; font-weight: 300; line-height: 1.8; font-size: 0.95rem;">
+                        La nostra storia ha radici in un viaggio lontano, ma trova dimora a Napoli, nella cornice vibrante e moderna di Fuorigrotta. Abbiamo scelto questo dinamico distretto urbano per dar vita a uno spazio dove il tempo rallenta e cede il passo al rituale sacro della preparazione del sushi.
+                    </p>
+
+                    <p class="mb-4" style="color: #a3a3a3; font-weight: 300; line-height: 1.8; font-size: 0.95rem;">
+                        Siamo un piccolo santuario del gusto: qui il rigore dell'accademia di Tokyo sposa l'attenzione calorosa per l'ospite tipica del nostro territorio. Pochi coperti, linee geometriche e l'uso di materiali naturali, per regalare un'esperienza gastronomica raccolta, intima e indimenticabile.
+                    </p>
+
+                    <div class="about-feature-box">
+                        <p class="about-feature-text italic">
+                            "Progettiamo ogni singolo assaggio per essere un ponte tra la meticolosa cultura giapponese e l'eccellenza culinaria napoletana."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Colonna Immagine Atmosfera (Destra) -->
+                <div class="col-12 col-lg-5 col-xl-6 ps-lg-5 scroll-reveal reveal-delay-2">
+                    <div class="about-img-wrapper">
+                        <img 
+                            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop" 
+                            alt="[Immagine dell'interno elegante e minimale del ristorante]" 
+                            class="about-img"
+                        >
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sezione Contatti & Mappa -->
+    <section class="section-contacts" id="contacts">
+        <div class="container px-4 px-md-5">
+            <div class="row align-items-center justify-content-between g-5">
+                
+                <!-- Colonna Informazioni Utili (Sinistra) -->
+                <div class="col-12 col-lg-5 col-xl-4 scroll-reveal">
+                    <div class="d-inline-flex align-items-center gap-3 mb-4">
+                        <span class="tagline-line" style="width: 2.5rem;"></span>
+                        <span class="tagline-text" style="font-size: 0.7rem;">Incontra il gusto</span>
+                    </div>
+
+                    <h2 class="font-serif text-white mb-5" style="font-size: calc(1.8rem + 1vw); font-weight: 400; line-height: 1.25;">
+                        Riserva la tua <br>
+                        <span style="color: var(--brand-accent);">esperienza sensoriale.</span>
+                    </h2>
+
+                    <!-- Indirizzo -->
+                    <div class="contact-info-block">
+                        <h4 class="contact-info-label">Indirizzo</h4>
+                        <p class="contact-info-value">
+                            Via Giulio Cesare, 42<br>
+                            80125 Fuorigrotta, Napoli
+                        </p>
+                    </div>
+
+                    <!-- Contatti Telefonici ed Email -->
+                    <div class="contact-info-block">
+                        <h4 class="contact-info-label">Contatti</h4>
+                        <p class="contact-info-value">
+                            Telefono: <a href="tel:+39081555555">+39 081 555 555</a><br>
+                            Email: <a href="mailto:info@kurosushi.it">info@kurosushi.it</a>
+                        </p>
+                    </div>
+
+                    <!-- Orari di apertura -->
+                    <div class="contact-info-block mb-3">
+                        <h4 class="contact-info-label">Orari di Apertura</h4>
+                        <p class="contact-info-value">
+                            Lunedì - Sabato: 19:30 - 23:30<br>
+                            Domenica: Chiuso
+                        </p>
+                    </div>
+
+		    <button class="btn-brand-outline">Contattaci</button>
+                </div>
+
+                <!-- Colonna Mappa Interattiva Minimalista (Destra) -->
+                <div class="col-12 col-lg-7 col-xl-7 ps-lg-5 scroll-reveal reveal-delay-2">
+                    <div class="map-wrapper">
+                        <!-- Mappa OpenStreetMap incentrata sulla zona di Fuorigrotta, Napoli -->
+                        <iframe 
+                            class="map-iframe" 
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=14.1800%2C40.8180%2C14.2100%2C40.8320&amp;layer=mapnik&amp;marker=40.8252%2C14.1932" 
+                            title="Mappa di Kuro Sushi a Fuorigrotta"
+                        ></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Elegante -->
+    <footer class="footer-custom">
+        <div class="container px-4 px-md-5">
+            <div class="row align-items-center justify-content-between g-4 scroll-reveal">
+                
+                <!-- Logo Footer -->
+                <div class="col-12 col-md-3 text-center text-md-start">
+                    <a href="#" class="footer-logo">
+                        LOGO
+                    </a>
+                </div>
+
+                <!-- Link Rapidi -->
+                <div class="col-12 col-md-6 text-center">
+                    <ul class="list-unstyled d-flex flex-wrap justify-content-center gap-4 m-0 p-0">
+                        <li><a href="#" class="footer-link">Home</a></li>
+                        <li><a href="#selections" class="footer-link">Selezioni</a></li>
+                        <li><a href="#about" class="footer-link">Chi siamo</a></li>
+                        <li><a href="#contacts" class="footer-link">Contatti</a></li>
+                    </ul>
+                </div>
+
+                <!-- Icone Social con SVG Incorporati (Risoluzione del Bug di Visualizzazione) -->
+                <div class="col-12 col-md-3 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                        <!-- Instagram -->
+                        <a href="#" class="footer-social-icon" aria-label="Instagram">
+                            <svg class="icon" width="20" height="20" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="#" class="footer-social-icon" aria-label="Facebook">
+                            <svg class="icon" width="20" height="20" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </a>
+                        <!-- TripAdvisor / Recensioni -->
+                        <a href="#" class="footer-social-icon" aria-label="Tripadvisor">
+                            <svg class="icon" width="20" height="20" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Divisore e Copyright -->
+            <div class="row mt-5 pt-4 border-top border-secondary border-opacity-10 scroll-reveal">
+                <div class="col-12 text-center">
+                    <p class="footer-copyright m-0">
+                        &copy; 2026 Kuro Sushi S.r.l. Tutti i diritti riservati. Via Giulio Cesare, Fuorigrotta, Napoli.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Keyframe dell'animazione Bounce per lo scroll indicator -->
+    <style>
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8,0,1,1);
+            }
+            50% {
+                transform: none;
+                animation-timing-function: cubic-bezier(0,0,0.2,1);
+            }
+        }
+    </style>
+
+    <!-- Script Interattivo e Gestione Scroll -->
+    <script>
+        // Elementi DOM per il Menu Mobile
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileClose = document.getElementById('mobileClose');
+        const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+        // Funzione per aprire il menu mobile
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Funzione per chiudere il menu mobile
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event Listeners
+        mobileToggle.addEventListener('click', openMobileMenu);
+        mobileClose.addEventListener('click', closeMobileMenu);
+        
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Funzione di scorrimento fluido verso la sezione selezioni
+        function scrollToSelections() {
+            document.getElementById('selections').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- INTERSECTION OBSERVER PER SCROLL-REVEAL ANIMATIONS ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const revealElements = document.querySelectorAll('.scroll-reveal');
+
+            const observerOptions = {
+                root: null, // Rileva rispetto al viewport
+                rootMargin: '0px',
+                threshold: 0.12 // L'elemento si attiva quando è visibile al 12%
+            };
+
+            const revealObserver = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Facoltativo: smetti di osservare dopo che l'elemento è stato rivelato
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+        });
+    </script>
+    
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
